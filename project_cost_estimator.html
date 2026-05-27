@@ -1,0 +1,141 @@
+
+<style>
+  .wrap { padding: 1.5rem 0; }
+  .section-title { font-size: 13px; color: var(--color-text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 12px; }
+  .member-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 10px; display: flex; align-items: center; gap: 16px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; flex-shrink: 0; }
+  .av-v { background: #E6F1FB; color: #0C447C; }
+  .av-d { background: #EEEDFE; color: #3C3489; }
+  .av-m { background: #E1F5EE; color: #085041; }
+  .av-s { background: #FAEEDA; color: #633806; }
+  .member-info { flex: 1; }
+  .member-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 2px; }
+  .member-role { font-size: 12px; color: var(--color-text-secondary); margin: 0; }
+  .rate-badge { font-size: 12px; color: var(--color-text-secondary); white-space: nowrap; }
+  .hours-input { display: flex; align-items: center; gap: 8px; }
+  .hours-input input { width: 72px; text-align: center; font-size: 14px; }
+  .cost-out { font-size: 14px; font-weight: 500; color: var(--color-text-primary); min-width: 90px; text-align: right; }
+  .summary { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-top: 1.5rem; }
+  .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 14px; color: var(--color-text-secondary); }
+  .summary-row.total { border-top: 0.5px solid var(--color-border-tertiary); margin-top: 8px; padding-top: 14px; }
+  .summary-row.total .label { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+  .summary-row.total .val { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+  .profit-row .val { color: #3B6D11; }
+  .reset-btn { margin-top: 1rem; width: 100%; }
+  .hrs-label { font-size: 12px; color: var(--color-text-secondary); }
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Project cost estimator for client pricing</h2>
+
+  <p class="section-title">Enter hours per team member</p>
+
+  <div class="member-card">
+    <div class="avatar av-v">VK</div>
+    <div class="member-info">
+      <p class="member-name">Vivek</p>
+      <p class="member-role">Handling &nbsp;·&nbsp; <span class="rate-badge">₹75/hr</span></p>
+    </div>
+    <div class="hours-input">
+      <span class="hrs-label">hrs</span>
+      <input type="number" id="h-vivek" min="0" value="0" placeholder="0" oninput="calc()" />
+    </div>
+    <div class="cost-out" id="c-vivek">₹0</div>
+  </div>
+
+  <div class="member-card">
+    <div class="avatar av-d">DH</div>
+    <div class="member-info">
+      <p class="member-name">Dhruv</p>
+      <p class="member-role">Senior developer &nbsp;·&nbsp; <span class="rate-badge">₹187.50/hr</span></p>
+    </div>
+    <div class="hours-input">
+      <span class="hrs-label">hrs</span>
+      <input type="number" id="h-dhruv" min="0" value="0" placeholder="0" oninput="calc()" />
+    </div>
+    <div class="cost-out" id="c-dhruv">₹0</div>
+  </div>
+
+  <div class="member-card">
+    <div class="avatar av-m">MT</div>
+    <div class="member-info">
+      <p class="member-name">Mitisha</p>
+      <p class="member-role">Junior developer &nbsp;·&nbsp; <span class="rate-badge">₹75/hr</span></p>
+    </div>
+    <div class="hours-input">
+      <span class="hrs-label">hrs</span>
+      <input type="number" id="h-mitisha" min="0" value="0" placeholder="0" oninput="calc()" />
+    </div>
+    <div class="cost-out" id="c-mitisha">₹0</div>
+  </div>
+
+  <div class="member-card">
+    <div class="avatar av-s">SW</div>
+    <div class="member-info">
+      <p class="member-name">Shweta</p>
+      <p class="member-role">UI/UX designer &nbsp;·&nbsp; <span class="rate-badge">₹155/hr</span></p>
+    </div>
+    <div class="hours-input">
+      <span class="hrs-label">hrs</span>
+      <input type="number" id="h-shweta" min="0" value="0" placeholder="0" oninput="calc()" />
+    </div>
+    <div class="cost-out" id="c-shweta">₹0</div>
+  </div>
+
+  <div class="summary">
+    <div class="summary-row">
+      <span class="label">Total hours</span>
+      <span class="val" id="s-hours">0 hrs</span>
+    </div>
+    <div class="summary-row">
+      <span class="label">Raw cost (team)</span>
+      <span class="val" id="s-raw">₹0</span>
+    </div>
+    <div class="summary-row profit-row">
+      <span class="label">Profit margin (30%)</span>
+      <span class="val" id="s-profit">₹0</span>
+    </div>
+    <div class="summary-row total">
+      <span class="label">Quote to client</span>
+      <span class="val" id="s-total">₹0</span>
+    </div>
+  </div>
+
+  <button class="reset-btn" onclick="reset()"><i class="ti ti-refresh" aria-hidden="true"></i> Reset</button>
+</div>
+
+<script>
+  const rates = { vivek: 75, dhruv: 187.5, mitisha: 75, shweta: 155 };
+
+  function fmt(n) {
+    return '₹' + Math.round(n).toLocaleString('en-IN');
+  }
+
+  function calc() {
+    let rawTotal = 0, totalHours = 0;
+    ['vivek','dhruv','mitisha','shweta'].forEach(m => {
+      const h = parseFloat(document.getElementById('h-' + m).value) || 0;
+      const cost = h * rates[m];
+      rawTotal += cost;
+      totalHours += h;
+      document.getElementById('c-' + m).textContent = fmt(cost);
+    });
+    const profit = rawTotal * 0.3;
+    const total = rawTotal + profit;
+    document.getElementById('s-hours').textContent = totalHours + ' hrs';
+    document.getElementById('s-raw').textContent = fmt(rawTotal);
+    document.getElementById('s-profit').textContent = fmt(profit);
+    document.getElementById('s-total').textContent = fmt(total);
+  }
+
+  function reset() {
+    ['vivek','dhruv','mitisha','shweta'].forEach(m => {
+      document.getElementById('h-' + m).value = 0;
+      document.getElementById('c-' + m).textContent = '₹0';
+    });
+    document.getElementById('s-hours').textContent = '0 hrs';
+    document.getElementById('s-raw').textContent = '₹0';
+    document.getElementById('s-profit').textContent = '₹0';
+    document.getElementById('s-total').textContent = '₹0';
+  }
+</script>
