@@ -3,587 +3,275 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Cost Estimator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #0d0d0d;
-      --surface: #141414;
-      --surface2: #1c1c1c;
-      --border: rgba(255,255,255,0.07);
-      --border-hover: rgba(255,255,255,0.14);
-      --text: #f0ede8;
-      --muted: #6b6866;
-      --accent: #c8f064;
-      --accent-dim: rgba(200,240,100,0.1);
-      --accent-border: rgba(200,240,100,0.25);
-      --vivek: #4facde;
-      --dhruv: #b48af7;
-      --mitisha: #5dd6a8;
-      --shweta: #f7a05d;
-    }
-
-    html, body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 3rem 1.25rem 4rem;
-    }
-
-    header {
-      width: 100%;
-      max-width: 640px;
-      margin-bottom: 2.5rem;
-    }
-
-    .tag {
-      display: inline-block;
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      color: var(--accent);
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      border-radius: 4px;
-      padding: 4px 10px;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      font-size: clamp(1.8rem, 5vw, 2.6rem);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-
-    h1 span {
-      color: var(--accent);
-    }
-
-    .subtitle {
-      margin-top: 0.6rem;
-      font-size: 14px;
-      color: var(--muted);
-      font-weight: 400;
-    }
-
-    .main {
-      width: 100%;
-      max-width: 640px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .section-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      margin-top: 6px;
-    }
-
-    .member-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1rem 1.25rem;
-      display: grid;
-      grid-template-columns: auto 1fr auto auto;
-      align-items: center;
-      gap: 14px;
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .member-card:hover {
-      border-color: var(--border-hover);
-      background: var(--surface2);
-    }
-
-    .avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      flex-shrink: 0;
-    }
-
-    .av-vivek   { background: rgba(79,172,222,0.12); color: #4facde; border: 1px solid rgba(79,172,222,0.2); }
-    .av-dhruv   { background: rgba(180,138,247,0.12); color: #b48af7; border: 1px solid rgba(180,138,247,0.2); }
-    .av-mitisha { background: rgba(93,214,168,0.12); color: #5dd6a8; border: 1px solid rgba(93,214,168,0.2); }
-    .av-shweta  { background: rgba(247,160,93,0.12); color: #f7a05d; border: 1px solid rgba(247,160,93,0.2); }
-
-    .member-info { min-width: 0; }
-
-    .member-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.2;
-    }
-
-    .member-role {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
-      font-family: 'DM Mono', monospace;
-    }
-
-    .input-wrap {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0 10px;
-      transition: border-color 0.2s;
-    }
-
-    .input-wrap:focus-within {
-      border-color: var(--accent);
-    }
-
-    .input-wrap input {
-      width: 56px;
-      background: transparent;
-      border: none;
-      outline: none;
-      font-family: 'DM Mono', monospace;
-      font-size: 14px;
-      color: var(--text);
-      padding: 8px 0;
-      text-align: center;
-    }
-
-    .input-wrap input::-webkit-inner-spin-button,
-    .input-wrap input::-webkit-outer-spin-button { -webkit-appearance: none; }
-
-    .hrs-lbl {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .member-cost {
-      font-family: 'DM Mono', monospace;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text);
-      min-width: 88px;
-      text-align: right;
-    }
-
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 8px 0 4px;
-    }
-
-    .summary-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-top: 6px;
-    }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 7px 0;
-    }
-
-    .summary-row .s-label {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .summary-row .s-val {
-      font-family: 'DM Mono', monospace;
-      font-size: 14px;
-      color: var(--text);
-    }
-
-    .summary-row.profit .s-val {
-      color: var(--accent);
-    }
-
-    .summary-row.hours .s-val {
-      color: var(--muted);
-    }
-
-    .total-row {
-      margin-top: 14px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .total-label {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .total-value {
-      font-family: 'DM Mono', monospace;
-      font-size: 28px;
-      font-weight: 500;
-      color: var(--accent);
-      letter-spacing: -0.02em;
-    }
-
-    .breakdown-bar {
-      margin-top: 1.5rem;
-      display: flex;
-      height: 6px;
-      border-radius: 99px;
-      overflow: hidden;
-      gap: 2px;
-    }
-
-    .bar-seg {
-      height: 100%;
-      border-radius: 99px;
-      transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .bar-seg.vivek   { background: var(--vivek); }
-    .bar-seg.dhruv   { background: var(--dhruv); }
-    .bar-seg.mitisha { background: var(--mitisha); }
-    .bar-seg.shweta  { background: var(--shweta); }
-    .bar-seg.profit  { background: var(--accent); }
-
-    .bar-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 18px;
-      margin-top: 10px;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-    }
-
-    .legend-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 1.25rem;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      font-family: 'Syne', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-      letter-spacing: 0.01em;
-      border: none;
-    }
-
-    .btn-reset {
-      background: var(--surface2);
-      color: var(--muted);
-      border: 1px solid var(--border);
-    }
-
-    .btn-reset:hover {
-      color: var(--text);
-      border-color: var(--border-hover);
-    }
-
-    .btn-copy {
-      background: var(--accent);
-      color: #0d0d0d;
-    }
-
-    .btn-copy:hover {
-      background: #d6f57a;
-    }
-
-    .btn-copy:active, .btn-reset:active {
-      transform: scale(0.98);
-    }
-
-    .copied-msg {
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      text-align: center;
-      color: var(--accent);
-      margin-top: 8px;
-      height: 16px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .copied-msg.show { opacity: 1; }
-
-    footer {
-      margin-top: 3rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-    }
-
-    @media (max-width: 480px) {
-      .member-card { grid-template-columns: auto 1fr; grid-template-rows: auto auto; }
-      .input-wrap { grid-column: 1; }
-      .member-cost { grid-column: 2; text-align: right; }
-    }
-  </style>
+  <title>GS-estimate · Admin Panel & Cost Estimator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <!-- Dynamic Header Area -->
   <header>
-    <div class="tag">Internal tool</div>
-    <h1>Project Cost<br /><span>Estimator</span></h1>
-    <p class="subtitle">Enter hours per team member → get client quote with 30% margin</p>
+    <div class="brand-area">
+      <div class="tag">Internal Admin Console</div>
+      <h1>Enterprise Cost<br /><span>Estimator</span></h1>
+      <p class="subtitle">Offline-first manager for employees, salaries, teams, and quotes</p>
+    </div>
+    
+    <!-- Backup and Portability Actions -->
+    <div class="backup-actions">
+      <button class="btn-backup" id="btn-export" title="Export database to JSON file">
+        <span class="icon">📤</span> Export File
+      </button>
+      <button class="btn-backup" id="btn-import" title="Restore database from JSON backup file">
+        <span class="icon">📥</span> Import File
+      </button>
+      <button class="btn-backup" onclick="toggleManualBackup()" title="Copy/Paste database string directly as backup">
+        <span class="icon">📋</span> Manual JSON
+      </button>
+      <input type="file" id="restore-file-input" accept=".json" style="display: none;" />
+    </div>
   </header>
 
+  <!-- Navigation Tab Bar -->
+  <nav class="dashboard-nav">
+    <button class="tab-btn active" data-tab="calculator">
+      <span class="icon">📊</span> Cost Estimator
+    </button>
+    <button class="tab-btn" data-tab="employees">
+      <span class="icon">👥</span> Employees Directory
+    </button>
+    <button class="tab-btn" data-tab="teams">
+      <span class="icon">💼</span> Teams Manager
+    </button>
+  </nav>
+
+  <!-- Main View Frame -->
   <div class="main">
 
-    <p class="section-label">Team &amp; hours</p>
-
-    <div class="member-card">
-      <div class="avatar av-vivek">VK</div>
-      <div class="member-info">
-        <div class="member-name">Vivek</div>
-        <div class="member-role">Handling · ₹75/hr</div>
+    <!-- Manual JSON Backup/Restore Collapsible Panel -->
+    <div class="form-panel" id="manual-backup-panel" style="margin-bottom: 12px;">
+      <h3 class="form-title">Manual Copy / Paste JSON Backup</h3>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px; line-height:1.4;">
+        If your system blocks file downloads, copy the serialized text below and paste it on another device to restore all settings instantly.
+      </p>
+      <textarea id="manual-backup-text" class="form-input" style="height:140px; font-family:'DM Mono',monospace; font-size:11px; width:100%; resize:vertical; background:var(--bg);" placeholder="Paste JSON backup string here..."></textarea>
+      <div class="form-actions" style="margin-top:8px;">
+        <button class="btn btn-copy" onclick="copyManualBackup()">📋 Copy Backup Text</button>
+        <button class="btn btn-primary" style="flex:1.2" onclick="restoreManualBackup()">⚡ Restore From Paste</button>
+        <button class="btn btn-reset" onclick="toggleManualBackup()">✕ Close</button>
       </div>
-      <div class="input-wrap">
-        <input type="number" id="h-vivek" min="0" value="" placeholder="0" oninput="calc()" />
-        <span class="hrs-lbl">hrs</span>
-      </div>
-      <div class="member-cost" id="c-vivek">₹0</div>
     </div>
 
-    <div class="member-card">
-      <div class="avatar av-dhruv">DH</div>
-      <div class="member-info">
-        <div class="member-name">Dhruv</div>
-        <div class="member-role">Senior dev · ₹187.50/hr</div>
-      </div>
-      <div class="input-wrap">
-        <input type="number" id="h-dhruv" min="0" value="" placeholder="0" oninput="calc()" />
-        <span class="hrs-lbl">hrs</span>
-      </div>
-      <div class="member-cost" id="c-dhruv">₹0</div>
-    </div>
-
-    <div class="member-card">
-      <div class="avatar av-mitisha">MT</div>
-      <div class="member-info">
-        <div class="member-name">Mitisha</div>
-        <div class="member-role">Junior dev · ₹75/hr</div>
-      </div>
-      <div class="input-wrap">
-        <input type="number" id="h-mitisha" min="0" value="" placeholder="0" oninput="calc()" />
-        <span class="hrs-lbl">hrs</span>
-      </div>
-      <div class="member-cost" id="c-mitisha">₹0</div>
-    </div>
-
-    <div class="member-card">
-      <div class="avatar av-shweta">SW</div>
-      <div class="member-info">
-        <div class="member-name">Shweta</div>
-        <div class="member-role">UI/UX designer · ₹155/hr</div>
-      </div>
-      <div class="input-wrap">
-        <input type="number" id="h-shweta" min="0" value="" placeholder="0" oninput="calc()" />
-        <span class="hrs-lbl">hrs</span>
-      </div>
-      <div class="member-cost" id="c-shweta">₹0</div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="summary-card">
-      <div class="summary-row hours">
-        <span class="s-label">Total hours</span>
-        <span class="s-val" id="s-hours">0 hrs</span>
-      </div>
-      <div class="summary-row">
-        <span class="s-label">Raw team cost</span>
-        <span class="s-val" id="s-raw">₹0</span>
-      </div>
-      <div class="summary-row profit">
-        <span class="s-label">Profit margin (30%)</span>
-        <span class="s-val" id="s-profit">₹0</span>
+    <!-- TAB 1: COST CALCULATOR PANEL -->
+    <section class="tab-panel active" id="calculator-panel">
+      
+      <!-- Scope Filter & Global Baseline Card Grid -->
+      <div class="section-header">
+        <p class="section-label">Active Scope &amp; Baselines</p>
       </div>
 
-      <div class="total-row">
-        <span class="total-label">Quote to client</span>
-        <span class="total-value" id="s-total">₹0</span>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 0.8fr; gap: 12px;">
+        <!-- Scope Selector Card -->
+        <div class="filter-card" style="margin: 0; padding: 12px 16px;">
+          <div class="filter-info">
+            <span class="label" style="font-size:12px;">Scope Filter</span>
+            <select class="select-custom" id="team-filter-select" style="margin-top:6px; width:100%; padding:6px 10px; font-size:12px;">
+              <!-- Dynamically populated options -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Reset System defaults card -->
+        <div class="filter-card" style="margin: 0; padding: 12px 16px; cursor:pointer;" onclick="resetDatabase()" title="Reset employees and teams to original default system preset">
+          <div class="filter-info" style="display:flex; flex-direction:column; justify-content:center; height:100%;">
+            <span class="label" style="font-size:12px; color:#ef4444; display:flex; align-items:center; gap:4px; font-weight:600;">↺ Reset System</span>
+            <span class="sub" style="font-size:10px; margin-top:2px; color:var(--text-muted);">Restore default employees &amp; teams</span>
+          </div>
+        </div>
+
+        <!-- Global Baseline hours card -->
+        <div class="filter-card" style="margin: 0; padding: 12px 16px;">
+          <div class="filter-info">
+            <span class="label" style="font-size:12px;">Work Hours / Mo</span>
+            <div class="input-wrap" style="margin-top:6px; background:var(--bg); border:1px solid var(--border); padding:0 8px;">
+              <input type="number" id="baseline-hours" min="1" max="500" value="160" style="width:100%; padding:5px 0; font-size:12px;" title="Custom baseline of work hours per month to derive employee hourly rate" />
+              <span class="hrs-lbl" style="font-size:10px;">hrs</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="breakdown-bar" id="breakdown-bar">
-        <div class="bar-seg vivek"   id="bar-vivek"   style="flex:0"></div>
-        <div class="bar-seg dhruv"   id="bar-dhruv"   style="flex:0"></div>
-        <div class="bar-seg mitisha" id="bar-mitisha" style="flex:0"></div>
-        <div class="bar-seg shweta"  id="bar-shweta"  style="flex:0"></div>
-        <div class="bar-seg profit"  id="bar-profit"  style="flex:0"></div>
+      <div class="section-header" style="margin-top: 10px;">
+        <p class="section-label">Resource Input Hours</p>
       </div>
 
-      <div class="bar-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--vivek)"></div>Vivek</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--dhruv)"></div>Dhruv</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--mitisha)"></div>Mitisha</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--shweta)"></div>Shweta</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Profit</div>
+      <!-- Dynamically filled list of employee card inputs -->
+      <div class="list-container" id="estimator-cards-container">
+        <!-- Rendered by app.js -->
       </div>
 
-      <div class="actions">
-        <button class="btn btn-reset" onclick="reset()">↺ Reset</button>
-        <button class="btn btn-copy" onclick="copyQuote()">Copy quote summary</button>
+      <div class="section-header">
+        <p class="section-label">Profit Calculator Settings</p>
       </div>
-      <div class="copied-msg" id="copied-msg">✓ Copied to clipboard</div>
-    </div>
+
+      <!-- Profit Margin Controls -->
+      <div class="margin-control-card">
+        <div class="margin-title-row">
+          <span class="label">Profit Percentage</span>
+          <!-- Dynamic Model switch to solve Markup vs Margin mathematically -->
+          <div class="math-toggle">
+            <button class="math-toggle-btn active" data-model="markup" title="Profit added directly on top of resource cost">Markup</button>
+            <button class="math-toggle-btn" data-model="margin" title="Profit representing a share of the client quote amount">Margin</button>
+          </div>
+        </div>
+
+        <div class="margin-slider-wrap">
+          <input type="range" class="custom-slider" id="profit-slider" min="0" max="100" value="30" />
+          <div class="margin-input-box">
+            <input type="number" id="profit-input" min="0" max="100" value="30" />
+            <span>%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <p class="section-label">Quote Cost Summary</p>
+      </div>
+
+      <!-- Dynamic calculations breakdown summary -->
+      <div class="summary-card">
+        <div class="summary-row hours">
+          <span class="s-label">Total aggregated hours</span>
+          <span class="s-val" id="s-hours">0 hrs</span>
+        </div>
+        <div class="summary-row">
+          <span class="s-label">Raw resource cost</span>
+          <span class="s-val" id="s-raw">₹0</span>
+        </div>
+        <div class="summary-row profit">
+          <span class="s-label">Calculated profit</span>
+          <span class="s-val" id="s-profit">₹0</span>
+        </div>
+
+        <div class="total-row">
+          <span class="total-label">Quote to client</span>
+          <span class="total-value" id="s-total">₹0</span>
+        </div>
+
+        <!-- Sleek interactive segmented flex breakdown progressbar -->
+        <div class="breakdown-bar" id="breakdown-bar" style="display: none;">
+          <!-- Active employee cost blocks + profit blocks are dynamically generated -->
+        </div>
+
+        <!-- Color legend -->
+        <div class="bar-legend" id="bar-legend" style="display: none;">
+          <!-- Dynamically populated legends -->
+        </div>
+
+        <!-- Quote Actions -->
+        <div class="actions">
+          <button class="btn btn-reset" onclick="resetCalculator()" title="Clear hour inputs for currently active estimate scope only">↺ Reset Estimate</button>
+          <button class="btn btn-copy" onclick="copyQuoteSummary()">Copy quote summary</button>
+        </div>
+        <div class="copied-msg" id="copied-msg">✓ Copied to clipboard</div>
+      </div>
+    </section>
+
+    <!-- TAB 2: EMPLOYEES DIRECTORY PANEL -->
+    <section class="tab-panel" id="employees-panel">
+      
+      <div class="directory-actions">
+        <p class="section-label">Active Directory</p>
+        <button class="btn-primary" id="btn-add-emp-trigger" onclick="toggleAddEmployeeForm()">
+          + Add Employee
+        </button>
+      </div>
+
+      <!-- Add/Edit Employee Form Panel -->
+      <div class="form-panel" id="employee-form-panel" data-edit-id="">
+        <h3 class="form-title" id="emp-form-title">Add New Employee</h3>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="emp-name">Full Name</label>
+            <input type="text" id="emp-name" class="form-input" placeholder="e.g. Dhruv" required />
+          </div>
+          <div class="form-group">
+            <label for="emp-role">Role Description</label>
+            <input type="text" id="emp-role" class="form-input" placeholder="e.g. Senior dev" required />
+          </div>
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between;">
+              <label for="emp-salary">Monthly Salary (₹)</label>
+              <!-- Real-time Derived Rate label -->
+              <span id="salary-preview-label" style="font-size:10px; font-family:'DM Mono',monospace; color:var(--accent);"></span>
+            </div>
+            <input type="number" id="emp-salary" class="form-input" placeholder="e.g. 30000" min="1" required />
+          </div>
+          <div class="form-group">
+            <label>Brand Theme Color</label>
+            <div class="color-picker-wrap" id="emp-color-wrap">
+              <!-- Dynamically populated selectable color picker options -->
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-copy" onclick="submitEmployeeForm()">Save Employee</button>
+          <button class="btn btn-reset" onclick="toggleAddEmployeeForm()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Employees Grid directory container -->
+      <div class="list-container" id="employees-list-container">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 3: TEAMS MANAGER PANEL -->
+    <section class="tab-panel" id="teams-panel">
+      
+      <div class="directory-actions">
+        <p class="section-label">Teams Organization</p>
+        <button class="btn-primary" id="btn-add-team-trigger" onclick="toggleAddTeamForm()">
+          + Create New Team
+        </button>
+      </div>
+
+      <!-- Add/Edit Team Form Panel -->
+      <div class="form-panel" id="team-form-panel" data-edit-id="">
+        <h3 class="form-title" id="team-form-title">Create New Team</h3>
+        
+        <div class="form-group">
+          <label for="team-name">Team Name</label>
+          <input type="text" id="team-name" class="form-input" placeholder="e.g. Backend Division" required />
+        </div>
+
+        <div class="form-group" style="margin-top: 6px;">
+          <label>Assign Team Members</label>
+          <div class="members-select-panel" id="team-members-checkboxes">
+            <!-- Dynamically populated checklists -->
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-copy" onclick="submitTeamForm()">Save Team Configuration</button>
+          <button class="btn btn-reset" onclick="toggleAddTeamForm()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Custom created Teams list directory container -->
+      <div class="list-container" id="teams-list-container">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
 
   </div>
 
-  <footer>© 2025 · Internal use only</footer>
+  <!-- Shared Toast Notifications Portal -->
+  <div id="toast-container" class="toast-container"></div>
 
-  <script>
-    const rates = { vivek: 75, dhruv: 187.5, mitisha: 75, shweta: 155 };
+  <footer>© 2026 · Internal Admin Cost Dashboard · Secure Offline Client Data storage</footer>
 
-    function fmt(n) {
-      return '₹' + Math.round(n).toLocaleString('en-IN');
-    }
-
-    function calc() {
-      let rawTotal = 0, totalHours = 0;
-      const costs = {};
-
-      ['vivek', 'dhruv', 'mitisha', 'shweta'].forEach(m => {
-        const h = parseFloat(document.getElementById('h-' + m).value) || 0;
-        const cost = h * rates[m];
-        costs[m] = cost;
-        rawTotal += cost;
-        totalHours += h;
-        document.getElementById('c-' + m).textContent = fmt(cost);
-      });
-
-      const profit = rawTotal * 0.3;
-      const total = rawTotal + profit;
-
-      document.getElementById('s-hours').textContent = totalHours + ' hrs';
-      document.getElementById('s-raw').textContent = fmt(rawTotal);
-      document.getElementById('s-profit').textContent = fmt(profit);
-      document.getElementById('s-total').textContent = fmt(total);
-
-      const grandTotal = rawTotal + profit;
-      if (grandTotal > 0) {
-        ['vivek', 'dhruv', 'mitisha', 'shweta'].forEach(m => {
-          document.getElementById('bar-' + m).style.flex = costs[m];
-        });
-        document.getElementById('bar-profit').style.flex = profit;
-      } else {
-        ['vivek','dhruv','mitisha','shweta','profit'].forEach(m => {
-          document.getElementById('bar-' + m).style.flex = 0;
-        });
-      }
-    }
-
-    function reset() {
-      ['vivek', 'dhruv', 'mitisha', 'shweta'].forEach(m => {
-        document.getElementById('h-' + m).value = '';
-        document.getElementById('c-' + m).textContent = '₹0';
-        document.getElementById('bar-' + m).style.flex = 0;
-      });
-      document.getElementById('bar-profit').style.flex = 0;
-      document.getElementById('s-hours').textContent = '0 hrs';
-      document.getElementById('s-raw').textContent = '₹0';
-      document.getElementById('s-profit').textContent = '₹0';
-      document.getElementById('s-total').textContent = '₹0';
-    }
-
-    function copyQuote() {
-      const hours = document.getElementById('s-hours').textContent;
-      const raw   = document.getElementById('s-raw').textContent;
-      const profit= document.getElementById('s-profit').textContent;
-      const total = document.getElementById('s-total').textContent;
-
-      const lines = ['vivek','dhruv','mitisha','shweta'].map(m => {
-        const h = parseFloat(document.getElementById('h-' + m).value) || 0;
-        if (h === 0) return null;
-        const name = m.charAt(0).toUpperCase() + m.slice(1);
-        return `  ${name}: ${h} hrs → ${document.getElementById('c-' + m).textContent}`;
-      }).filter(Boolean);
-
-      const text = [
-        '── Project Cost Estimate ──',
-        ...lines,
-        '',
-        `Total Hours  : ${hours}`,
-        `Raw Cost     : ${raw}`,
-        `Profit (30%) : ${profit}`,
-        `─────────────────────────`,
-        `Client Quote : ${total}`,
-      ].join('\n');
-
-      function showCopied() {
-        const msg = document.getElementById('copied-msg');
-        msg.classList.add('show');
-        setTimeout(() => msg.classList.remove('show'), 2500);
-      }
-
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(showCopied).catch(() => fallbackCopy(text, showCopied));
-      } else {
-        fallbackCopy(text, showCopied);
-      }
-    }
-
-    function fallbackCopy(text, cb) {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      try { document.execCommand('copy'); cb(); } catch(e) { alert(text); }
-      document.body.removeChild(ta);
-    }
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
